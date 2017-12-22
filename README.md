@@ -1,2 +1,2 @@
 # tfLearning
-the way or tf again
+the way to tf again
