@@ -5,6 +5,7 @@ import sys
 import os
 import json
 from collections import OrderedDict
+import pprint
 
 
 BASE_CIKU = ['价格', '公司名称', '发信息', '多大', '拒绝', '机器人', '肯定', '问你个问题', '你太不专业了',
@@ -53,7 +54,8 @@ def ciku_parse(key_wd):
     """print key sim_list"""
     for key, val in all_ciku_dct.items():
         if key_wd in key:
-            print(all_ciku_dct[key])
+            # print(all_ciku_dct[key])
+            pprint.pprint(all_ciku_dct[key], indent=1, width=80, depth=100)
 
 
 def get_input(info):
