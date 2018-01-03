@@ -4,6 +4,7 @@
 import os
 import json
 from collections import OrderedDict
+import pandas as pd
 
 def load_from_path(path):
     final_cfg = {}
@@ -16,6 +17,43 @@ def load_from_path(path):
                 else:
                     raise Exception('[load_from_path] Error: json %s format error' % filename)
     return final_cfg
+
+
+def json_convTo_csv(filename):
+    data_dct = {}
+    if filename.endswith('.json'):
+        data_dct = load_from_json(filename, False)
+    else:
+        raise  Exception('bad json file!')
+
+    csvfile = str(filename).replace('.json', '.csv')
+    fcsv = open(csvfile, 'w', encoding='utf-8')
+    for key, value in data_dct.items():
+        new_value = '0.99' + ',' + ','.join(value)
+        fcsv.write(new_value)
+        new_value = ''
+    fcsv.close()
+
+
+def json_convTo_xls(filename, save_name):
+    print("===================", save_name)
+    data_dct = {}
+    if filename.endswith('.json'):
+        data_dct = load_from_json(filename, False)
+    else:
+        raise Exception('bad json file')
+
+    xlsfile = str(filename).replace('.json', '.xls').replace('wds', save_name)
+    fxls = pd.ExcelWriter(xlsfile)
+    for key, value in data_dct.items():
+        new_value = ['0.99'] + value
+        # sheet_name = str(filename).split('/')[-1][:-5]
+        sheet_name = str(save_name)
+        pd.DataFrame(new_value).to_excel(fxls, sheet_name=sheet_name, index=False, header=False)
+        new_value = []
+    fxls.save()
+    if os.path.isfile(xlsfile):
+        os.system('cp %s /Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/xls/' %(xlsfile))
 
 
 def load_from_json(js, keep_order=True):
@@ -111,17 +149,82 @@ def read_all_temp_sim(path):
     pass
 
 
+def txt_convTo_json(path):
+    domain_dct = {}
+    filename = path.split('/')[-1]
+    if filename.endswith('.txt'):
+        with open(path, encoding='utf-8') as f:
+            lines = f.readlines()
+            for line in lines:
+                if ":" not in line:
+                    continue
+                key, val = line.strip('\n').split(':')
+                if key not in domain_dct.keys():
+                    domain_dct[key] = val.split(' ')
+                else:
+                    domain_dct[key] += val.split(' ')
+                # print(domain_dct)
+    else:
+        raise Exception('Bad txt!')
+    jsonpath = str(path).replace('sim_txt', 'sim_json')
+    jsonname = jsonpath.replace('.txt', '.json')
+    dump_to_jsonfile(domain_dct, jsonname)
+
+
+def json_convTo_simtxt(path, save_name):
+    data_dct = {}
+    filename = path
+    if filename.endswith('.json'):
+        data_dct = load_from_json(filename, False)
+    else:
+        raise Exception('bad json file')
+    sim_txt = str(path).replace('.json', '.txt')
+    with open(sim_txt, 'w', encoding='utf-8') as f:
+        for key, val in data_dct.items():
+            pass
+
+def json_merge(path):
+    all_dct = {}
+    all_dct_name = os.path.join(path, 'ciku.json')
+
+    for root, dirs, filename in os.walk(path):
+        for dir in dirs:
+            sub_path = os.path.join(path, dir)
+            json_path = os.path.join(sub_path, 'wds.json')
+            json_data = open(json_path, encoding='utf-8')
+            json_dct = json.load(json_data)
+            for key, val in json_dct.items():
+                if key in all_dct.keys():
+                    all_dct[key] += val
+                else:
+                    all_dct[key] = val
+    dump_to_jsonfile(all_dct, all_dct_name)
+
+
+
 def main():
-    path = ''
-    read_all_temp_sim(path)
+    DIR_PATH = '/Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/base_ciku'
+    for parent, dirnames, filenames in os.walk(DIR_PATH):
+        for dirname in dirnames:
+            foldername = os.path.join(parent, dirname)
+            json_path = os.path.join(foldername, 'wds.json')
+            json_convTo_xls(json_path, dirname)
+
+    # json_convTo_csv(path)
+    # txt_convTo_json(path)
+
+    # read_all_temp_sim(path)
     """
-    json_path = '/home/xupeng/Desktop/test/ciku/ciku'
-    ciku_dct = load_from_path(json_path)
-    new_dct = rm_repeat_wds(ciku_dct)
-    filename = os.path.join(json_path, 'new_wds.json')
-    # all data_dict
-    dump_to_jsonfile(new_dct, filename)
+    for root, dirs, filename in os.walk(DIR_PATH):
+        for dir in dirs:
+            json_path = os.path.join(DIR_PATH, dir)
+            ciku_dct = load_from_path(json_path)
+            new_dct = rm_repeat_wds(ciku_dct)
+            filename = os.path.join(json_path, 'wds.json')"""
+            # all data_dict
+            # dump_to_jsonfile(new_dct, filename)
     # sperate single data_dict
+    """
     sub_dict = {}
     for key, val in new_dct.items():
         temp = 'single/' + str(key) + '.json'
