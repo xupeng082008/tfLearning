@@ -40,8 +40,8 @@ def load_from_json(js, keep_order=True):
 def ciku_parse(key_wd):
     all_ciku_dct = {}
 
-    # ciku_path = '/home/xupeng/workspace/cfg_repos/base_ciku/base_ciku'
-    ciku_path = '/Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/base_ciku'
+    ciku_path = '/home/xupeng/workspace/cfg_repos/base_ciku/base_ciku'
+    # ciku_path = '/Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/base_ciku'
     for key in BASE_CIKU:
         key_json_name = str(key) + '/wds.json'
         key_json_path = os.path.join(ciku_path, key_json_name)
