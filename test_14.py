@@ -9,8 +9,8 @@ import pprint
 
 
 BASE_CIKU = ['价格', '公司名称', '发信息', '多大', '拒绝', '机器人', '肯定', '问你个问题', '你太不专业了',
-                 '公司地址', '否定', '怎么去你公司', '改天去你们公司看一下', '等一下', '贵姓', '骗子',
-                 '你怎么知道我信息的', '公司规模', '在忙', '投诉', '有没有在听我说话', '考虑一下', '重复']
+                 '公司地址', '否定', '怎么去你公司', '改天去你们公司看一下', '等一下', '贵姓', '骗人',
+                 '你怎么知道我信息的', '公司规模', '在忙', '投诉', '有没有在听我说话', '考虑一下', '你刚说什么']
 def load_from_json(js, keep_order=True):
     if os.path.exists(js):
         try:
@@ -54,8 +54,8 @@ def ciku_parse(key_wd):
     """print key sim_list"""
     for key, val in all_ciku_dct.items():
         if key_wd in key:
-            # print(all_ciku_dct[key])
-            pprint.pprint(all_ciku_dct[key], indent=1, width=80, depth=100)
+            print(all_ciku_dct[key])
+            # pprint.pprint(all_ciku_dct[key], indent=1, width=8, depth=10)
 
 
 def get_input(info):
@@ -63,7 +63,8 @@ def get_input(info):
 
 def main():
     # key = sys.argv[1]
-    print("base_ciku:", BASE_CIKU)
+    print("base_ciku:")
+    pprint.pprint(BASE_CIKU, indent=4, width=8, depth=10)
     info = 'please input you wanted key_words: '
     while 1:
         key_wds = get_input(info)
