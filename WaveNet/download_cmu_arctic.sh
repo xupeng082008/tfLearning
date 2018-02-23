@@ -4,6 +4,7 @@
 # The corpus will be downloaded in $HOME/data/cmu_arctic/
 
 location=$HOME/data/cmu_arctic/
+location=$HOME/xupeng/workspace/code/git/data/
 
 if [ ! -e $location ]
 then

@@ -37,7 +37,7 @@ def load_from_json(js, keep_order=True):
         return {}
 
 
-def ciku_parse(key_wd):
+def parse_ciku(key_wd):
     all_ciku_dct = {}
 
     ciku_path = '/home/xupeng/workspace/cfg_repos/base_ciku/base_ciku'
@@ -68,7 +68,7 @@ def main():
     info = 'please input you wanted key_words: '
     while 1:
         key_wds = get_input(info)
-        ciku_parse(key_wds)
+        parse_ciku(key_wds)
 
 
 
