@@ -149,6 +149,62 @@ def read_all_temp_sim(path):
     pass
 
 
+def read_all_general_json(path):
+    all_paths = []
+    dir_path = '/home/xupeng/workspace'
+    key_name_txt = os.path.join(dir_path, 'key_name.txt')
+
+    try:
+        with open(key_name_txt, encoding='utf-8') as f:
+            lines = f.readlines()
+            for line in lines:
+                line = str(line).replace('\n', '')
+                # path = os.path.join(dir_path, 'cfg_repos', line, 'cfgs', line, '/new_domain_cfg/一般问题.json')
+                path = str(dir_path) + '/cfg_repos/' + str(line) + '/cfgs/' + str(line) + '/new_domain_cfg/一般问题.json'
+                if os.path.exists(path):
+                    all_paths += [str(path).replace('\n', '')]
+    except Exception as e:
+        print(str(e))
+    out_put = 'general_all.txt'
+    for sim_path in all_paths:
+        if not os.path.isfile(sim_path):
+            continue
+        wf = open(out_put, 'a')
+        wf.write(sim_path + '\n')
+        wf.close()
+        """with open(sim_path, encoding='utf-8') as sf:
+            lines = sf.readlines()
+            for line in lines:
+                wf = open(out_put, 'a')
+                wf.write(line + '\n')
+                wf.close()"""
+    return all_paths
+    print('read general json end!')
+
+
+def merge_general_json(paths):
+    if not paths:
+        print('bad path')
+        return None
+    merged_dct = {}
+    ignore_keys = ['positive', 'negative']
+    count = 0
+    new_dct = {}
+    for path in paths:
+        if os.path.isfile(path):
+            js_dct = load_from_json(path)
+            special_dct = js_dct.get('一般问题').get('branch')
+            # print(special_dct)
+            for key, value in special_dct.items():
+                if key not in ignore_keys:
+                    new_key ='special_' + str(count)
+                    new_dct[new_key] = value.get('keys')
+                    count += 1
+    # print(new_dct)
+    dump_to_jsonfile(new_dct, 'all_general.json')
+    pass
+
+
 def txt_convTo_json(path):
     domain_dct = {}
     filename = path.split('/')[-1]
@@ -203,17 +259,20 @@ def json_merge(path):
 
 
 def main():
-    DIR_PATH = '/Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/base_ciku'
+    """DIR_PATH = '/Users/xupeng/cfg_repos/work/gjznhs/话术/关键词整理/sim_json_bak/base_ciku'
     for parent, dirnames, filenames in os.walk(DIR_PATH):
         for dirname in dirnames:
             foldername = os.path.join(parent, dirname)
             json_path = os.path.join(foldername, 'wds.json')
-            json_convTo_xls(json_path, dirname)
+            json_convTo_xls(json_path, dirname)"""
 
     # json_convTo_csv(path)
     # txt_convTo_json(path)
 
     # read_all_temp_sim(path)
+    path = ''
+    json_paths = read_all_general_json(path)
+    merge_general_json(json_paths)
     """
     for root, dirs, filename in os.walk(DIR_PATH):
         for dir in dirs:

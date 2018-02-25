@@ -37,12 +37,12 @@ def search_json_files(path, file_pathes={}):
             for dir in dirs:
                 json_file = dir + '/cfgs/' + dir + '/replace.json'
                 json_file_path = os.path.join(rt, json_file)
-                """if os.path.isfile(json_file_path):
+                if os.path.isfile(json_file_path):
                     json_data = load_from_json(json_file_path)
                     # print(json_file_path)
                     speaker = json_data.get('use_speaker_flag', None)
                     if speaker and '2' in speaker:
-                        print(dir)"""
+                        print(dir)
                 if os.path.isfile(json_file_path):
                     file_pathes[dir] = json_file_path
         return file_pathes
