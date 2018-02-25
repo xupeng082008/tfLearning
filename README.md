@@ -1,2 +1,2 @@
-# tfLearning
-the way to tf again
+the way to tf
+ubuntu accept successfully
