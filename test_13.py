@@ -214,6 +214,7 @@ def txt_convTo_json(path):
             for line in lines:
                 if ":" not in line:
                     continue
+                print(line)
                 key, val = line.strip('\n').split(':')
                 if key not in domain_dct.keys():
                     domain_dct[key] = val.split(' ')
@@ -224,7 +225,8 @@ def txt_convTo_json(path):
         raise Exception('Bad txt!')
     jsonpath = str(path).replace('sim_txt', 'sim_json')
     jsonname = jsonpath.replace('.txt', '.json')
-    dump_to_jsonfile(domain_dct, jsonname)
+    new_dct = rm_repeat_wds(domain_dct)
+    dump_to_jsonfile(new_dct, jsonname)
 
 
 def json_convTo_simtxt(path, save_name):
